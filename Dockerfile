@@ -2,8 +2,9 @@ FROM node:20.11.1-alpine3.19
 
 WORKDIR /app
 
-RUN apk update && \
-    apk install -y curl && \
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache curl && \
     rm -rf /var/lib/apk/lists/*
 
 COPY package*.json ./
@@ -11,8 +12,6 @@ COPY package*.json ./
 RUN npm install --production
 
 COPY . .
-
-RUN chmod +x index.js
 
 EXPOSE 3000
 
